@@ -31,11 +31,20 @@ RUN     curl -sL https://github.com/sammcj/mcp-devtools/releases/latest/download
         chmod +x ${BINDIR}/mcp-devtools && \
         rm -rf *
 
+RUN     BEADS_VERSION=$(curl -sL https://api.github.com/repos/steveyegge/beads/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') && \
+        curl -sL https://github.com/steveyegge/beads/releases/download/v${BEADS_VERSION}/beads_${BEADS_VERSION}_linux_amd64.tar.gz -o bd.tar.gz && \
+        tar -xzf bd.tar.gz && \
+        mv bd ${BINDIR}/ && \
+        chmod +x ${BINDIR}/bd && \
+        rm -rf *
+
 # for some reason running opencode --version leaves a 4 MB .so hanging around in /tmp/
 RUN     opencode --version && \
         rm -f /tmp/.*.so
 
 RUN     mcp-devtools --version
+
+RUN     bd --version
 
 USER    ubuntu
 WORKDIR /src
