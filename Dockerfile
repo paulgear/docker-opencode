@@ -22,6 +22,13 @@ RUN     apt-get update && \
         apt-get install --no-install-recommends -y ${APT_PKGS} && \
         rm -rf /var/lib/apt/lists/*
 
+# Add Docker's official GPG key and repository
+RUN     curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
+        echo "deb [signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" > /etc/apt/sources.list.d/docker.list && \
+        apt-get update && \
+        apt-get install --no-install-recommends -y docker-ce-cli && \
+        rm -rf /var/lib/apt/lists/*
+
 WORKDIR /tmp/installer
 ARG     BINDIR=/usr/local/bin
 
