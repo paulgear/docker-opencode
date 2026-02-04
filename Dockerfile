@@ -3,6 +3,7 @@ FROM    paulgear/base:latest
 ARG     APT_PKGS="\
 ca-certificates \
 git \
+sudo \
 "
 
 ENV     DEBIAN_FRONTEND=noninteractive
@@ -45,6 +46,9 @@ RUN     opencode --version && \
 RUN     mcp-devtools --version
 
 RUN     bd --version
+
+RUN     echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu && \
+        chmod 0440 /etc/sudoers.d/ubuntu
 
 USER    ubuntu
 WORKDIR /src
