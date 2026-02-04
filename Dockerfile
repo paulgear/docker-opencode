@@ -32,19 +32,19 @@ RUN     curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyr
 WORKDIR /tmp/installer
 ARG     BINDIR=/usr/local/bin
 
-RUN     curl -sL https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz -o opencode.tar.gz && \
+RUN     curl -fsSL https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz -o opencode.tar.gz && \
         tar -xvf opencode.tar.gz && \
         mv opencode ${BINDIR}/ && \
         chmod +x ${BINDIR}/opencode && \
         chown root:root ${BINDIR}/opencode && \
         rm -rf *
 
-RUN     curl -sL https://github.com/sammcj/mcp-devtools/releases/latest/download/mcp-devtools-linux-amd64 -o ${BINDIR}/mcp-devtools && \
+RUN     curl -fsSL https://github.com/sammcj/mcp-devtools/releases/latest/download/mcp-devtools-linux-amd64 -o ${BINDIR}/mcp-devtools && \
         chmod +x ${BINDIR}/mcp-devtools && \
         rm -rf *
 
-RUN     BEADS_VERSION=$(curl -sL https://api.github.com/repos/steveyegge/beads/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') && \
-        curl -sL https://github.com/steveyegge/beads/releases/download/v${BEADS_VERSION}/beads_${BEADS_VERSION}_linux_amd64.tar.gz -o bd.tar.gz && \
+RUN     BEADS_VERSION=$(curl -fsSL https://api.github.com/repos/steveyegge/beads/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') && \
+        curl -fsSL https://github.com/steveyegge/beads/releases/download/v${BEADS_VERSION}/beads_${BEADS_VERSION}_linux_amd64.tar.gz -o bd.tar.gz && \
         tar -xzf bd.tar.gz && \
         mv bd ${BINDIR}/ && \
         chmod +x ${BINDIR}/bd && \
