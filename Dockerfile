@@ -3,6 +3,8 @@ FROM    paulgear/base:latest
 ARG     APT_PKGS="\
 ca-certificates \
 git \
+python3-pip \
+python3-pytest \
 sudo \
 "
 
