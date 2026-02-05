@@ -33,14 +33,18 @@ RUN     curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyr
 WORKDIR /tmp/installer
 ARG     BINDIR=/usr/local/bin
 
-RUN     curl -fsSL https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz -o opencode.tar.gz && \
+RUN     OPENCODE_SHA256=$(curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest | jq -r '.assets[] | select(.name=="opencode-linux-x64.tar.gz") | .digest' | cut -d: -f2) && \
+        curl -fsSL https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz -o opencode.tar.gz && \
+        echo "${OPENCODE_SHA256}  opencode.tar.gz" | sha256sum -c - && \
         tar -xvf opencode.tar.gz && \
         mv opencode ${BINDIR}/ && \
         chmod +x ${BINDIR}/opencode && \
         chown root:root ${BINDIR}/opencode && \
         rm -rf *
 
-RUN     curl -fsSL https://github.com/sammcj/mcp-devtools/releases/latest/download/mcp-devtools-linux-amd64 -o ${BINDIR}/mcp-devtools && \
+RUN     MCPDEVTOOLS_SHA256=$(curl -fsSL https://api.github.com/repos/sammcj/mcp-devtools/releases/latest | jq -r '.assets[] | select(.name=="mcp-devtools-linux-amd64") | .digest' | cut -d: -f2) && \
+        curl -fsSL https://github.com/sammcj/mcp-devtools/releases/latest/download/mcp-devtools-linux-amd64 -o ${BINDIR}/mcp-devtools && \
+        echo "${MCPDEVTOOLS_SHA256}  ${BINDIR}/mcp-devtools" | sha256sum -c - && \
         chmod +x ${BINDIR}/mcp-devtools && \
         rm -rf *
 
