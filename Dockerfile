@@ -44,11 +44,14 @@ RUN     curl -fsSL https://github.com/sammcj/mcp-devtools/releases/latest/downlo
         chmod +x ${BINDIR}/mcp-devtools && \
         rm -rf *
 
-RUN     BEADS_VERSION=$(curl -fsSL https://api.github.com/repos/steveyegge/beads/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') && \
-        curl -fsSL https://github.com/steveyegge/beads/releases/download/v${BEADS_VERSION}/beads_${BEADS_VERSION}_linux_amd64.tar.gz -o bd.tar.gz && \
-        tar -xzf bd.tar.gz && \
-        mv bd ${BINDIR}/ && \
-        chmod +x ${BINDIR}/bd && \
+RUN     curl -fsSL https://api.github.com/repos/ArjenSchwarz/rune/releases/latest -o release.json && \
+        RUNE_VERSION=$(jq -r '.tag_name' release.json | sed 's/^v//') && \
+        RUNE_SHA256=$(jq -r '.assets[] | select(.name=="rune-v'${RUNE_VERSION}'-linux-amd64.tar.gz") | .digest' release.json | cut -d: -f2) && \
+        curl -fsSL https://github.com/ArjenSchwarz/rune/releases/download/v${RUNE_VERSION}/rune-v${RUNE_VERSION}-linux-amd64.tar.gz -o rune.tar.gz && \
+        echo "${RUNE_SHA256}  rune.tar.gz" | sha256sum -c - && \
+        tar -xzf rune.tar.gz && \
+        mv rune ${BINDIR}/ && \
+        chmod +x ${BINDIR}/rune && \
         rm -rf *
 
 # for some reason running opencode --version leaves a 4 MB .so hanging around in /tmp/
@@ -57,7 +60,7 @@ RUN     opencode --version && \
 
 RUN     mcp-devtools --version
 
-RUN     bd --version
+RUN     rune --version
 
 RUN     echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu && \
         chmod 0440 /etc/sudoers.d/ubuntu
