@@ -38,6 +38,13 @@ RUN     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | g
         apt-get install --no-install-recommends -y nodejs && \
         rm -rf /var/lib/apt/lists/*
 
+# Add HashiCorp GPG key and repository for Terraform
+RUN     curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /etc/apt/keyrings/hashicorp-archive-keyring.gpg && \
+        echo "deb [signed-by=/etc/apt/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(. /etc/os-release && echo "$VERSION_CODENAME") main" > /etc/apt/sources.list.d/hashicorp.list && \
+        apt-get update && \
+        apt-get install --no-install-recommends -y terraform && \
+        rm -rf /var/lib/apt/lists/*
+
 WORKDIR /tmp/installer
 ARG     BINDIR=/usr/local/bin
 
@@ -78,6 +85,8 @@ RUN     opencode --version && \
 RUN     mcp-devtools --version
 
 RUN     rune --version
+
+RUN     terraform --version
 
 USER    ubuntu
 WORKDIR /src
