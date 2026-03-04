@@ -66,6 +66,11 @@ RUN     curl -fsSL https://api.github.com/repos/ArjenSchwarz/rune/releases/lates
         chmod +x ${BINDIR}/rune && \
         rm -rf *
 
+RUN     echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu && \
+        chmod 0440 /etc/sudoers.d/ubuntu
+
+COPY    --chmod=0755 opencode /usr/local/bin
+
 # for some reason running opencode --version leaves a 4 MB .so hanging around in /tmp/
 RUN     opencode --version && \
         rm -f /tmp/.*.so
@@ -73,9 +78,6 @@ RUN     opencode --version && \
 RUN     mcp-devtools --version
 
 RUN     rune --version
-
-RUN     echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu && \
-        chmod 0440 /etc/sudoers.d/ubuntu
 
 USER    ubuntu
 WORKDIR /src
