@@ -82,7 +82,8 @@ RUN     curl -fsSL https://api.github.com/repos/ArjenSchwarz/rune/releases/lates
         chmod +x ${BINDIR}/rune && \
         rm -rf *
 
-RUN     echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu && \
+RUN     echo 'ubuntu ALL=(ALL) NOPASSWD:ALL \n\
+Defaults env_keep += "http_proxy https_proxy no_proxy"' > /etc/sudoers.d/ubuntu && \
         chmod 0440 /etc/sudoers.d/ubuntu
 
 COPY    --chmod=0755 opencode /usr/local/bin
