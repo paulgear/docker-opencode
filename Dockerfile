@@ -47,9 +47,17 @@ RUN     curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /et
 
 WORKDIR /tmp/installer
 ARG     BINDIR=/usr/local/bin
+ARG     OPENCODE_VERSION=v1.4.3
 
-RUN     OPENCODE_SHA256=$(curl -fsSL https://api.github.com/repos/anomalyco/opencode/releases/latest | jq -r '.assets[] | select(.name=="opencode-linux-x64.tar.gz") | .digest' | cut -d: -f2) && \
-        curl -fsSL https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz -o opencode.tar.gz && \
+RUN     if [ "${OPENCODE_VERSION}" = "latest" ]; then \
+            API_URL="https://api.github.com/repos/anomalyco/opencode/releases/latest"; \
+        else \
+            API_URL="https://api.github.com/repos/anomalyco/opencode/releases/tags/${OPENCODE_VERSION}"; \
+        fi && \
+        curl -fsSL ${API_URL} -o release.json && \
+        OPENCODE_VERSION=$(jq -r '.tag_name' release.json) && \
+        OPENCODE_SHA256=$(jq -r '.assets[] | select(.name=="opencode-linux-x64.tar.gz") | .digest' release.json | cut -d: -f2) && \
+        curl -fsSL https://github.com/anomalyco/opencode/releases/download/${OPENCODE_VERSION}/opencode-linux-x64.tar.gz -o opencode.tar.gz && \
         echo "${OPENCODE_SHA256}  opencode.tar.gz" | sha256sum -c - && \
         tar -xvf opencode.tar.gz && \
         mv opencode ${BINDIR}/ && \
