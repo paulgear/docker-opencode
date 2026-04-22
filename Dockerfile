@@ -5,6 +5,7 @@ ca-certificates \
 git \
 gnupg \
 jq \
+openssh-client \
 pylint \
 python3-pip \
 python3-pytest \
