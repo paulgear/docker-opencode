@@ -86,6 +86,9 @@ RUN     echo 'ubuntu ALL=(ALL) NOPASSWD:ALL \n\
 Defaults env_keep += "http_proxy https_proxy no_proxy"' > /etc/sudoers.d/ubuntu && \
         chmod 0440 /etc/sudoers.d/ubuntu
 
+# for some reason the docker image seems to default to root ownership
+RUN     chown ubuntu:ubuntu /home/ubuntu
+
 COPY    --chmod=0755 opencode /usr/local/bin
 
 # for some reason running opencode --version leaves a 4 MB .so hanging around in /tmp/
