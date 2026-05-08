@@ -33,9 +33,9 @@ RUN     curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyr
         apt-get install --no-install-recommends -y docker-ce-cli && \
         rm -rf /var/lib/apt/lists/*
 
-# Add NodeSource GPG key and repository for Node.js 20.x LTS
+# Add NodeSource GPG key and repository for Node.js
 RUN     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" > /etc/apt/sources.list.d/nodesource.list && \
+        echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" > /etc/apt/sources.list.d/nodesource.list && \
         apt-get update && \
         apt-get install --no-install-recommends -y nodejs && \
         rm -rf /var/lib/apt/lists/*
