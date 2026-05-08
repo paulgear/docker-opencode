@@ -49,7 +49,7 @@ RUN     curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /et
 
 WORKDIR /tmp/installer
 ARG     BINDIR=/usr/local/bin
-ARG     OPENCODE_VERSION=v1.4.3
+ARG     OPENCODE_VERSION=latest
 
 RUN     if [ "${OPENCODE_VERSION}" = "latest" ]; then \
             API_URL="https://api.github.com/repos/anomalyco/opencode/releases/latest"; \
