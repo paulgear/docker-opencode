@@ -74,16 +74,6 @@ RUN     MCPDEVTOOLS_SHA256=$(curl -fsSL https://api.github.com/repos/sammcj/mcp-
         chmod +x ${BINDIR}/mcp-devtools && \
         rm -rf *
 
-RUN     curl -fsSL https://api.github.com/repos/ArjenSchwarz/rune/releases/latest -o release.json && \
-        RUNE_VERSION=$(jq -r '.tag_name' release.json | sed 's/^v//') && \
-        RUNE_SHA256=$(jq -r '.assets[] | select(.name=="rune-v'${RUNE_VERSION}'-linux-amd64.tar.gz") | .digest' release.json | cut -d: -f2) && \
-        curl -fsSL https://github.com/ArjenSchwarz/rune/releases/download/v${RUNE_VERSION}/rune-v${RUNE_VERSION}-linux-amd64.tar.gz -o rune.tar.gz && \
-        echo "${RUNE_SHA256}  rune.tar.gz" | sha256sum -c - && \
-        tar -xzf rune.tar.gz && \
-        mv rune ${BINDIR}/ && \
-        chmod +x ${BINDIR}/rune && \
-        rm -rf *
-
 RUN     echo 'ubuntu ALL=(ALL) NOPASSWD:ALL \n\
 Defaults env_keep += "http_proxy https_proxy no_proxy"' > /etc/sudoers.d/ubuntu && \
         chmod 0440 /etc/sudoers.d/ubuntu
@@ -98,7 +88,6 @@ RUN     opencode --version && \
         rm -f /tmp/.*.so
 
 RUN     mcp-devtools --version
-RUN     rune --version
 RUN     terraform --version
 
 WORKDIR /src
