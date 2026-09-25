@@ -9,6 +9,7 @@ jq \
 make \
 openssh-client \
 pylint \
+python3-flake8 \
 python3-pip \
 python3-pytest \
 python3-venv \
