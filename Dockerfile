@@ -1,6 +1,7 @@
 FROM    paulgear/base:latest
 
 ARG     APT_PKGS="\
+black \
 ca-certificates \
 git \
 gnupg \

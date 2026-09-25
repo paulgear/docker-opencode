@@ -10,7 +10,7 @@ FLAGS_RUN=
 default: build
 
 build:
-	docker build -t $(REGISTRY)$(LOGIN)/$(REPO) --build-arg https_proxy=${https_proxy} $(FLAGS_BUILD) .
+	docker build -t $(REGISTRY)$(LOGIN)/$(REPO) --build-arg https_proxy=${https_proxy} --build-arg http_proxy=${http_proxy} $(FLAGS_BUILD) .
 
 push:	build
 	docker push $(FLAGS_PUSH) $(REGISTRY)$(LOGIN)/$(REPO)
